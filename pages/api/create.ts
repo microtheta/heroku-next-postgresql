@@ -12,6 +12,13 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const user = await prisma.users.findFirst()
+  const { isAdmin, name, userName }: { isAdmin?: boolean, name?: string, userName?: string } = req.query;
+  const user = await prisma.users.create({
+    data: {
+      name: name || 'dummy',
+      userName: userName || 'dummy',
+      isAdmin: !!isAdmin || false,
+    }
+  })
   res.status(200).json({ user })
 }
